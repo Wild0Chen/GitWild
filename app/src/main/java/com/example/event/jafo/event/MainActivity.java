@@ -3,15 +3,27 @@ package com.example.event.jafo.event;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.*;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity {
-
+    Button btnTest;
+    TextView ts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ts=(TextView)findViewById(R.id.TextV);
+        btnTest=(Button)findViewById(R.id.btnTest);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ts.setText("me me da");
+            }
+        });
     }
 
 

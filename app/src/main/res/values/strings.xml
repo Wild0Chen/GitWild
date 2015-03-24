@@ -4,5 +4,6 @@
     <string name="app_name">Event</string>
     <string name="hello_world">tht test string for event!</string>
     <string name="action_settings">Settings</string>
+    <string name="event_set_text">Test</string>
 
 </resources>
