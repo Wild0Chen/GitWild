@@ -1,20 +1,19 @@
 package com.example.event.jafo.event;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.*;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
-    Button btnTest;
-    TextView ts;
+    private int nSpeed=10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,47 +32,17 @@ public class MainActivity extends Activity {
         //飞机初始位置
         plv.currentX=me.widthPixels/2;
         plv.currentY=me.heightPixels/2+10;
-//        plv.setOnDragListener(new View.OnDragListener()
-//        {
-//            @Override
-//            public boolean onDrag(View v,DragEvent event)
-//            {
-//                plv.currentX=event.getX();
-//                plv.currentY=event.getY();
-//                plv.invalidate();
-//                return  true;
-//            }
-//        });
-//        ts=(TextView)findViewById(R.id.TextV);
-//        btnTest=(Button)findViewById(R.id.btnTest);
-//        btnTest.setOnClickListener(new MyListener());
-//        ts.setOnLongClickListener(new View.OnLongClickListener()
-//        {
-//            @Override
-//            public boolean onLongClick(View v)
-//            {
-//                ts.setText("longClick");
-//                return true;
-//            }
-//        });
-//        {
-//            @Override
-//            public void onClick(View v) {
-//                EditText edtText=(EditText)findViewById(R.id.EdtText);
-//                ts.setText(edtText.getText());
-//            }
-//        });
+       plv.setOnTouchListener(new View.OnTouchListener()
+       {
+           @Override
+           public boolean onTouch(View view, MotionEvent motionEvent) {
+               plv.currentX=motionEvent.getX();
+               plv.currentY=motionEvent.getY();
+               plv.invalidate();
+               return true;
+           }
+       });
     }
-    class MyListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v)
-        {
-            EditText edtText=(EditText)findViewById(R.id.EdtText);
-            ts.setText(edtText.getText());
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

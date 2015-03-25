@@ -7,27 +7,27 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.example.event.jafo.event.R;
-
 /**
- * Created by Jafo on 2015/3/24.
+ * Created by Jafo on 2015/3/25.
  */
-public class PlaneView extends View {
+public class PlaneEnemy extends View {
     public float currentX;
     public float currentY;
-    Bitmap plane;
+    Bitmap planeEnemy;
 
-    public PlaneView(Context context)
+    public PlaneEnemy(Context context)
     {
         super(context);
-        plane= BitmapFactory.decodeResource(context.getResources(), R.drawable.plane);
+        planeEnemy=BitmapFactory.decodeResource(context.getResources(),R.drawable.enemy);
         setFocusable(true);
     }
+
+
     @Override
-    public void onDraw(Canvas canvas)
+      public void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
         Paint p = new Paint();
-        canvas.drawBitmap(plane,currentX,currentY,p);
+        canvas.drawBitmap(planeEnemy,currentX,currentY,p);
     }
 }

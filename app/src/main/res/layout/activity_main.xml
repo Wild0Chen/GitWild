@@ -6,22 +6,5 @@
     android:gravity="top|center_vertical"
     tools:context=".MainActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:id="@+id/TextV"/>
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="@string/EdtText"
-        android:id="@+id/EdtText"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:visibility="invisible"
-        android:id="@+id/btnTest"
-        android:text="@string/event_set_text"/>
 
 </LinearLayout>
