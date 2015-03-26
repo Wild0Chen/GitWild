@@ -1,48 +1,109 @@
 package com.example.event.jafo.event;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.text.format.Time;
 import android.view.Menu;
 import android.view.*;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends Activity {
-    private int nSpeed=10;
+    TextView text=null;
+    EditText edt=null;
+    Button btn=null;
+    public int i=0;
+    String str="NULL";
+    //thread
+    class CalThread extends Thread
+    {
+        public  Handler threadHandle;
+        public void run(){
+            Looper.prepare();
+            threadHandle = new Handler(){
+                @Override
+            public void handleMessage(Message msg){
+                    if (0x1234==msg.what) {
+                        i++;
+                        str+="handle";
+                    }
+                }
+            };
+         Looper.loop();
+        }
+    }
+Context cts=this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //去掉窗口标题
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        final PlaneView plv=new PlaneView(this);
-        setContentView(plv);
-        //获取窗口管理器
-        WindowManager windowManager=getWindowManager();
-        Display display=windowManager.getDefaultDisplay();
-        DisplayMetrics me=new DisplayMetrics();
-        //获得屏幕宽和高
-        display.getMetrics(me);
-        //飞机初始位置
-        plv.currentX=me.widthPixels/2;
-        plv.currentY=me.heightPixels/2+10;
-       plv.setOnTouchListener(new View.OnTouchListener()
-       {
-           @Override
-           public boolean onTouch(View view, MotionEvent motionEvent) {
-               plv.currentX=motionEvent.getX();
-               plv.currentY=motionEvent.getY();
-               plv.invalidate();
-               return true;
-           }
-       });
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        text=(TextView)findViewById(R.id.TextV);
+        btn=(Button)findViewById(R.id.btn1);
+        edt=(EditText)findViewById(R.id.etx);
+        final CalThread calTh = new CalThread();
+        calTh.start();
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final DownTask taskAsync = new DownTask(cts);
+                taskAsync.handler = new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        if(0x1234==msg.what)
+                        {
+                            text.setText(taskAsync.strShow);
+                        }
+                    }
+                };
+                taskAsync.execute("https://github.com");
+                text.setText(taskAsync.strShow);
+//                str="";
+//                str+=edt.getText();
+//                calTh.threadHandle.sendEmptyMessage(0x1234);
+//                text.setText(str+i);
+            }
+        });
+
+        final Handler hadler = new Handler(){
+            @Override
+            public void handleMessage(Message msg){
+                if(msg.what==0x1234)
+                {
+                   // text.setText(""+i);
+                }
+            }
+        };
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                hadler.sendEmptyMessage(0x1234);
+                i++;
+                System.out.println(">>>>"+i);
+                return;
+            }
+        },0,500);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -63,5 +124,40 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class DownTask extends AsyncTask<String,Integer,String>
+    {
+        Context context=null;
+        public DownTask(Context ctx) {
+            context = ctx;
+        }
+
+        Handler handler=null;
+        public String strShow;
+        @Override
+        protected String doInBackground(String... urls) {
+            return  "this is string !";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            s+=">>>onPosExecute";
+            strShow=s;
+            if (null!=handler){
+                handler.sendEmptyMessage(0x1234);
+            }
+            ProgressDialog dlg = new ProgressDialog(context);
+            dlg.setTitle("try to show dlg ");
+            dlg.setCancelable(true);
+            dlg.show();
+            //super.onPostExecute(s);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            strShow+="onPreExecute";
+            super.onPreExecute();
+        }
     }
 }
